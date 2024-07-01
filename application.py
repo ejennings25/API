@@ -18,12 +18,12 @@ def handle_exception(error):
 # set the Book model with appropriate data types and constraint
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True, nullable=False)
+    book_name = db.Column(db.String(120), unique=True, nullable=False)
     author = db.Column(db.String(80), primary_key=True)
     publisher = db.Column(db.String(80), primary_key=True)
 
     def __repr__(self):
-        return f"{self.name} - {self.author} - {self.publisher}"
+        return f"{self.book_name} - {self.author} - {self.publisher}"
     
 # write crud for # id # book_name # author # publisher
 
@@ -37,7 +37,7 @@ def get_books():
 
     output = []
     for book in books:
-        book_data = {'name': book.name, 'author': book.author, 'publisher': book.publisher}
+        book_data = {'book_name': book.book_name, 'author': book.author, 'publisher': book.publisher}
 
         output.append(book_data)
 
@@ -46,11 +46,11 @@ def get_books():
 @app.route('/books/<id>')
 def get_books(id):
     books = Book.query.get_or_404(id)
-    return {'name': book.name, 'author': book.author, 'publisher': book.publisher}
+    return {'book_name': book.book_name, 'author': book.author, 'publisher': book.publisher}
 
 @app.route('/books', methods=['POST'])
 def add_book():
-    book = Book(name=request.json['name'], author=request.json['author'])
+    book = Book(book_name=request.json['book_name'], author=request.json['author'])
     db.session.add(book)
     db.session.commit()
     return {'id': book.id}
